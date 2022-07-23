@@ -8,7 +8,7 @@ import RegisterGoogle from "./components/RegisterGoogle"
 import hasAuthenticated from "./services/AuthApi"
 import WysiwygEditor from "./components/editor/wysiwyg"
 import NewPresentation from "./components/Presentation/newPresentation"
-import RevealPresentation from "./components/Presentation/Reveal"
+import RevealPresentation from "./components/Presentation/PressReveal"
 import Auth from "./context/Auth"
 import AuthenticatedRoute from "./components/AuthenticatedRoute"
 import 'bootstrap/dist/css/bootstrap.min.css';

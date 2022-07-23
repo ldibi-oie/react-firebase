@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, set, remove, update, onValue } from "firebase/database";
 // import { getFirestore , collection } from "firebase/firestore";
 import { doc, getDoc , getFirestore } from "firebase/firestore";
 
@@ -12,7 +12,7 @@ export default class Firebase{
   async createPresentation(title, link) {
 
     await set(ref(db, 'presentation/' + auth.currentUser.uid + "/" + title), {
-      createdBy: auth.currentUser.uid,
+      // createdBy: auth.currentUser.uid,
       link
     }).then(() => {
       return true;
@@ -36,7 +36,19 @@ export default class Firebase{
     })
   }
 
-  async getPresentation() {
+  async removeSlide(title) {
+
+    await update(ref(db, 'presentation/' + auth.currentUser.uid + "/" + title + '/slides/'), {
+      
+    }).then(() => {
+      return true;
+    })
+    .catch(() => {
+      return false;
+    })
+  }
+
+  getPresentation() {
 
     // const presentationRef = collection(getStore , 'presentation');
     // const queryRef = presentationRef.where('createdBy', '==', auth.currentUser.uid);
@@ -45,14 +57,17 @@ export default class Firebase{
     var p = []
     const presentationRef = ref(db, 'presentation/' + auth.currentUser.uid);
     onValue(presentationRef, (snapshot) => {
-      p.push(snapshot.val())
+      var slides = (snapshot.val())
+      for (const [key, value] of Object.entries(slides)) {
+        var item = {
+          title : key,
+          data : value
+        }
+        p.push(item)
+      }
     });
-    console.log(p)
 
     return p;
 
   }
-
-
-
 }
