@@ -24,7 +24,7 @@ function App() {
         <Route exact path="/register" element={<RegisterGoogle />}/>
         <Route path='/profile' element={<Profile/>} />
         <Route path="/presentation/new" element={<NewPresentation/>} />
-        <Route path="/presentation/start/*" element={<RevealPresentation />} />
+        <Route path="/diaporama/*" element={<RevealPresentation />} />
         <Route path='/slide/*' element={<WysiwygEditor/>} />
         
       </Routes>

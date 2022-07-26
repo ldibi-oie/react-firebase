@@ -13,21 +13,27 @@ export default class Firebase{
 
     await set(ref(db, 'presentation/' + auth.currentUser.uid + "/" + title), {
       // createdBy: auth.currentUser.uid,
-      link
-    }).then(() => {
-      return true;
-    })
-    .catch(() => {
-      return false;
-    })
-  }
-
-  async createSlide(title, contentPage , collaborators) {
-
-    await set(ref(db, 'presentation/' + auth.currentUser.uid + "/" + title + '/slides/'), {
+      link,
       createdBy: auth.currentUser.uid,
-      collaborators: collaborators,
-      content: contentPage
+      collaborators: '',
+      slides:{ 
+        "1" : {
+          content: ''
+        }
+      },
+    }).then(() => {
+      console.log("slides par defaut creer")
+    })
+    .catch(() => {
+      console.log("PROBLEMMMME")
+    })
+  }
+
+  async createSlide(title, contentPage , collaborators , nbPage) {
+    var nb = String(nbPage)
+    console.log(nbPage , nb)
+    await set(ref(db, 'presentation/' + auth.currentUser.uid + "/" + title + '/slides/' + nb), {
+      content : contentPage
     }).then(() => {
       return true;
     })
@@ -36,15 +42,9 @@ export default class Firebase{
     })
   }
 
-  async removeSlide(title) {
-
-    await update(ref(db, 'presentation/' + auth.currentUser.uid + "/" + title + '/slides/'), {
-      
-    }).then(() => {
-      return true;
-    })
-    .catch(() => {
-      return false;
+  async removeSlide(id) {
+    doc(getStore, 'presentation/', id).then(() => {
+      return id + ' supprimer';
     })
   }
 
@@ -61,6 +61,29 @@ export default class Firebase{
       for (const [key, value] of Object.entries(slides)) {
         var item = {
           title : key,
+          data : value
+        }
+        p.push(item)
+      }
+    });
+
+    return p;
+
+  }
+
+  async getPagesForOneSlide(title) {
+
+    // const presentationRef = collection(getStore , 'presentation');
+    // const queryRef = presentationRef.where('createdBy', '==', auth.currentUser.uid);
+    // return queryRef;
+
+    var p = []
+    const presentationRef = ref(db, 'presentation/' + auth.currentUser.uid + '/' + title + '/slides/');
+    onValue(presentationRef, (snapshot) => {
+      var slides = (snapshot.val())
+      for (const [key, value] of Object.entries(slides)) {
+        var item = {
+          index : key,
           data : value
         }
         p.push(item)

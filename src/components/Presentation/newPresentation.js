@@ -22,9 +22,8 @@ const NewPresentation = () => {
     // console.log(event.target.title.value)
 
     Database.createPresentation(event.target.title.value, auth.currentUser.uid + "/" + random ).then(() => {
-      navigate("/slide/" + auth.currentUser.uid + "/" + random, { state: { title: event.target.title.value}})
+      navigate("/slide/" + auth.currentUser.uid + "/" + random, { state: { title: event.target.title.value , contentPage: " "}})
     })
-    
   }
 
   return (
