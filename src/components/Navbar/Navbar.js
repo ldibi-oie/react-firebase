@@ -88,6 +88,13 @@ export default function Navbar() {
                       >
                         Manage Collaborators
                       </Link>
+
+                      <Link
+                        to="/messenger"
+                        class="text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Chat Messenger
+                      </Link>
                     </>
                   ) : (
                     ""

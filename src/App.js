@@ -9,6 +9,8 @@ import hasAuthenticated from "./services/AuthApi"
 import WysiwygEditor from "./components/editor/wysiwyg"
 import NewPresentation from "./components/Presentation/newPresentation"
 import RevealPresentation from "./components/Presentation/PressReveal"
+import Messenger from "./components/Messenger/Messenger"
+
 import Auth from "./context/Auth"
 import AuthenticatedRoute from "./components/AuthenticatedRoute"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,6 +28,7 @@ function App() {
         <Route path="/presentation/new" element={<NewPresentation/>} />
         <Route path="/diaporama/*" element={<RevealPresentation />} />
         <Route path='/slide/*' element={<WysiwygEditor/>} />
+        <Route path='/messenger/' element={<Messenger/>} />
         
       </Routes>
     // </Auth.provider>

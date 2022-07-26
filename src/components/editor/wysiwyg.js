@@ -33,22 +33,23 @@ export default function WysiwygEditor() {
   const handleChange = (data) => {
     setContent(data);
     submitSlide();
+    getPages()
   };
 
   const getPages = async () => {
-    
-    await Database.getPagesForOneSlide(title).then((pages) => {
-      setSlides(pages)
-      console.log(pages)
-      console.log(slides)
-    })
+    console.log(slides)
+
+    const pages = await Database.getPagesForOneSlide(title)
+    setSlides(pages)
+    console.log(pages)
+    console.log(slides)
   } 
 
   const submitSlide = async () => {
     
     await Database.createSlide(title, content, collaborators , index)
       .then((res) => {
-        // notyf.success("Your changes have been successfully saved!");
+        notyf.success("Your changes have been successfully saved!");
         return true
       })
       .catch((err) => {
@@ -58,23 +59,42 @@ export default function WysiwygEditor() {
       });
   };
 
+  const addSlide = () => {
+    Database.createSlide(title, '', collaborators , slides.length + 1)
+      .then((res) => {
+        getPages()
+        notyf.success("Nouvelle slide");
+        return true
+      })
+      .catch((err) => {
+        notyf.error('Réessayer plus tard !');
+        return false
+
+      });
+    
+    
+  }
+
   const newPage = async () => {
     submitSlide().then((status) => {
       setContent('');
     })
   }
 
-  const changePage = async (selected , content) => {
+  const changePage = async (event, selected , content) => {
+    event.preventDefault();
     setIndex(selected)
     setContent(content);
+  }
+
+  const changeTitle = () => {
+    
   }
 
   useEffect(() => {
     console.log(contentPage);
     setContent(contentPage);
-    setTimeout(() => {
-      getPages()
-    }, 300);
+    getPages()
   }, []);
 
   return (
@@ -82,8 +102,6 @@ export default function WysiwygEditor() {
     // ...
     <div className="bg-white">
       <div>
-        
-
         <main className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
@@ -92,15 +110,27 @@ export default function WysiwygEditor() {
 
             <div className="flex items-center">
               <div className="relative inline-block text-left">
-                <Button variant="outlined" onClick={() => newPage()} >
+                <Button variant="outlined" onClick={() => addSlide()} >
+                  <Typography
+                    variant="p"
+                    component="div"
+                    className="m-8"
+                    sx={{ flexGrow: 1 }}
+                  >
+                    ajouter une slide
+                  </Typography>
+                </Button>
+
+                <Button variant="outlined" onClick={() => addSlide()} >
                   <Typography
                     variant="p"
                     component="div"
                     sx={{ flexGrow: 1 }}
                   >
-                    +
+                    ajouter un collaborateur
                   </Typography>
-                </Button>                
+                </Button>
+
               </div>
 
               <button
@@ -145,12 +175,12 @@ export default function WysiwygEditor() {
               Products
             </h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10 overflow-auto">
               <div className="hidden lg:block">
                 {
                   slides.map((slide) => (
                     <div className="card card-side bg-base-100 shadow-xl flex flex-row justify-content-center p-5">
-                      <button type="button" className="" onClick={() => changePage(slide.index , slide.data.content)}>
+                      <button type="button" className="" onClick={(event) => changePage(event ,slide.index , slide.data.content)}>
                           {slide.index}
                       </button>
                     </div>
