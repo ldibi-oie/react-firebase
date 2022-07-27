@@ -73,7 +73,7 @@ export default function Home() {
           <div class="min-h-full">
             <header class="bg-white shadow">
               <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex flex-row justify-content-between">
-                <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+                <h1 class="text-3xl font-bold text-gray-900">Mes presentations</h1>
                 <Link to={"/presentation/new"}>
                 <Button variant="outlined">
                   
