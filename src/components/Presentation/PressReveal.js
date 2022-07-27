@@ -4,6 +4,9 @@ import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js';
 import RevealMarkdown  from 'reveal.js/plugin/markdown/markdown.js';
 import { useLocation } from "react-router-dom";
 
+import "/node_modules/reveal.js/dist/reveal.css";
+import "/node_modules/reveal.js/dist/theme/white.css";
+
 
 export default function RevealPresentation() {
     const location = useLocation();
@@ -13,6 +16,8 @@ export default function RevealPresentation() {
 
     useEffect(() => {
         let deck = new Reveal({
+            backgroundTransition: 'slide',
+            transition: 'slide',
             plugins: [ Markdown , RevealMarkdown ]
          })
 
@@ -40,8 +45,8 @@ export default function RevealPresentation() {
 
   return (
     <>
-        <div className="reveal">
-            <div className="slides">
+        <div className="reveal" style={{ height: '100vh' }}>
+            <div className="slides absolute" data-transition="slide">
                 {
                     data.map((item) => (
                         <section>
