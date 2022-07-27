@@ -2,9 +2,14 @@ import React , {useEffect} from 'react'
 import Reveal from 'reveal.js';
 import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js';
 import RevealMarkdown  from 'reveal.js/plugin/markdown/markdown.js';
+import { useLocation } from "react-router-dom";
 
 
 export default function RevealPresentation() {
+    const location = useLocation();
+    const data = location.state.contentPage
+
+    console.log(data)
 
     useEffect(() => {
         let deck = new Reveal({
@@ -22,15 +27,29 @@ export default function RevealPresentation() {
         });
     }, [])
 
+    var stringToHTML = (str) => {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(str, 'text/html').documentElement;
+        console.log(doc);
+        console.log(doc.body.querySelector("body").innerHTML);
+
+        return  doc.body.querySelector("body").innerHTML
+    };
+    // stringToHTML(`<h1><strong style="color: rgb(152, 212, 220);">item</strong></h1>`)
+    
+
   return (
     <>
         <div className="reveal">
             <div className="slides">
-                <section>Horizontal Slide</section>
-                <section>
-                <section>Vertical Slide 1</section>
-                <section>Vertical Slide 2</section>
-                </section>
+                {
+                    data.map((item) => (
+                        <section>
+                            {/* {stringToHTML(item.content)} */}
+                            {item.content}
+                        </section>
+                    ))
+                }
             </div>
 		</div>
     </>

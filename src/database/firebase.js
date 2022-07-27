@@ -42,12 +42,6 @@ export default class Firebase{
     })
   }
 
-  async removeSlide(id) {
-    doc(getStore, 'presentation/', id).then(() => {
-      return id + ' supprimer';
-    })
-  }
-
   getPresentation() {
 
     // const presentationRef = collection(getStore , 'presentation');
@@ -92,5 +86,30 @@ export default class Firebase{
 
     return p;
 
+  }
+
+  // async createConversation(to, from) {
+
+  //   await set(ref(db, 'presentation/' + auth.currentUser.uid + "/" + title), {
+  //     // createdBy: auth.currentUser.uid,
+  //     link,
+  //     createdBy: auth.currentUser.uid,
+  //     collaborators: '',
+  //     slides:{ 
+  //       "1" : {
+  //         content: ''
+  //       }
+  //     },
+  //   }).then(() => {
+  //     console.log("slides par defaut creer")
+  //   })
+  //   .catch(() => {
+  //     console.log("PROBLEMMMME")
+  //   })
+  // }
+
+  async deletePresentation(title){
+    const presentationRef = ref(db, 'presentation/' + auth.currentUser.uid + '/' + title);
+    remove(presentationRef)
   }
 }

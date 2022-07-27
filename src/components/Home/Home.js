@@ -6,6 +6,7 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Card from "react-bootstrap/Card";
+import esgi from './esgi.png';
 
 import RegisterGoogle from "../RegisterGoogle";
 import Firebase from "../../database/firebase";
@@ -20,6 +21,9 @@ export default function Home() {
   const [ModalOpen, setModelOpen] = useState(false);
   const [user, setUser] = useState("");
   const [popUp, setPopup] = useState(false);
+
+  const [deleteItem, setDeleteItem] = useState('');
+
 
   const start = () => {
     var m = Database.getPresentation();
@@ -48,12 +52,17 @@ export default function Home() {
 
   // console.log(user)
 
-  const openNav = () => {
+  const openNav = (title) => {
+    setDeleteItem(title)
     setModelOpen(!ModalOpen);
   };
 
   const confirmDelete = () => {
-    setModelOpen(!ModalOpen)
+    console.log(deleteItem)
+    Database.deletePresentation(deleteItem).then(() => {
+      setDeleteItem('')
+      setModelOpen(!ModalOpen);
+    })
     console.log("deleeeeetee")
   }
 
@@ -86,7 +95,6 @@ export default function Home() {
                   <div class="">
                     <br />
 
-                    <Button type="button" variant="outlined" onClick={openNav}> Test delete confirm</Button>
                     {
                       ModalOpen === true ? (
                         <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -103,16 +111,16 @@ export default function Home() {
                                       </svg>
                                     </div>
                                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                      <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Deactivate account</h3>
+                                      <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Suppression de {deleteItem} </h3>
                                       <div class="mt-2">
-                                        <p class="text-sm text-gray-500">Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.</p>
+                                        <p class="text-sm text-gray-500">Vous etes sur le point de supprimer cette slide, il est impossible de faire demi tour etes vous sure ?</p>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                  <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Deactivate</button>
-                                  <button type="button" onClick={openNav} class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>
+                                  <button type="button" onClick={confirmDelete} class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Supprimer</button>
+                                  <button type="button" onClick={openNav} class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Annuler</button>
                                 </div>
                               </div>
                             </div>
@@ -127,7 +135,7 @@ export default function Home() {
                             return (
                               <>
                                 {" "}
-                                <Card
+                                {/* <Card
                                   className="text-center m-5"
                                   style={{ width: "300px" }}
                                 >
@@ -170,12 +178,50 @@ export default function Home() {
                                       </button>
                                     </Link>
 
-                                    {/* <Button variant="outlined"  color='error' className="mt-4" onClick={removeSlide(item.title)}>Supprimer</Button> */}
                                   </Card.Body>
                                   <Card.Footer className="text-muted">
                                     MySliders
                                   </Card.Footer>
-                                </Card>
+                                </Card> */}
+                                    {/* <Button variant="outlined"  color='error' className="mt-4" onClick={removeSlide(item.title)}>Supprimer</Button> */}
+
+                                <div class="card w-96 bg-base-100 shadow-xl m-8">
+                                  <figure class="px-10 pt-10 m-8">
+                                    <img src={esgi} alt="Shoes" class="rounded-xl" />
+                                    
+                                  </figure>
+                                  <div class="card-body items-center text-center">
+                                    <h2 class="card-title">{item.title}</h2>
+                                    {/* <p>{item.title}</p> */}
+                                    <div class="card-actions">
+                                      <div class="btn-group  btn-group-vertical w-48">
+                                        <Link
+                                          to={"/slide/" + item.data.link}
+                                          state={{
+                                            title: item.title,
+                                            contentPage: item.data.slides,
+                                          }}
+                                          class="btn"
+                                        >
+                                            Modifier
+                                        </Link>
+                                        <button class="btn" onClick={() => openNav(item.title)}>
+                                          Supprimer
+                                        </button>
+                                        <Link
+                                          to={"/diaporama/" + item.data.link}
+                                          state={{
+                                            title: item.title,
+                                            contentPage: item.data.slides,
+                                          }}
+                                          class="btn"
+                                        >
+                                            Voir
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </>
                             );
                           })
